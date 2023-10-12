@@ -3,7 +3,7 @@ let articleId
 
 
 
-// let commentId
+
 console.log("디테일 js 로드")
 
 async function loadComments(articleId){
@@ -14,15 +14,18 @@ async function loadComments(articleId){
     commentList.innerHTML = ""
     response.forEach(comment =>{
         // 프로필사진 업로드하면 src 링크 바꿔주세요
+        // const profileImageSrc = comment.user.profile_image;
+        // <img class="mr-3" src="${profileImageSrc}" alt="프로필이미지" width="50" height "50">
+        // 아래 li class 밑에 빈공간에 넣어야하는데.. 지금 불러오기가 안됩니다.
         commentList.innerHTML += `
         <li class="media d-flex mt-4">
-        <img class="mr-3" src="https://i.namu.wiki/i/aAjVJcFK3NRRIt5Ef32SxP6r8Hpl1F_EFl6anZAzO_4shH3IM7fsB8BVnTwd8rJy1rzAXU4xW37zmTsGbxaWwEkn4qr3K-ZCcnObSHw4qF57dl5pKNUjDOTJSFwvMw3RhVehfZ0coU-0JEr7r7moDg.webp" alt="프로필이미지" width="50" height "50">
+        
         <div class="media-body">
-          <h5 class="mt-0 mb-1">${comment.user}</h5>
+          <h5 class="mt-0 mb-1">${comment.user}님</h5>
           ${comment.content}
-          ${comment.id}
+        
         </div>
-        <div>
+        <div >
             <button type="button" onclick="commentupdatesubmit(${comment.id},${articleId})">수정</button>
 
             <button type="button" onclick="commentdelete(${comment.id},${articleId})">삭제</button>
@@ -47,6 +50,7 @@ async function submitComment(){
 async function commentupdatesubmit(commentId, articleId){
     console.log(commentId)
     console.log(articleId)
+    
     window.location.href = `${frontend_base_url}/comment_update.html?article_id=${articleId}&comment_id=${commentId}`
 }
 
@@ -67,12 +71,12 @@ async function commentdelete(commentId) {
             "Authorization": `Bearer ${token}`
         },
     });
- 
+
     if (response.status == 204) {
         alert("댓글 삭제 완료!");
         window.location.replace(`${frontend_base_url}/article_detail.html?article_id=${articleId}`);
     } else {
-        alert(response.status);
+        alert("권한이 없습니다.",response.status);
     }
 }
 

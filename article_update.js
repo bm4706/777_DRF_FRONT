@@ -13,7 +13,9 @@ async function updatesubmit(){
 
     formdata.append('title', updatedTitle)
     formdata.append('content', updatedContent)
-    formdata.append('image', image)
+    if (image) {
+        formdata.append('image', image);
+    }
 
     let token = localStorage.getItem("access")
 

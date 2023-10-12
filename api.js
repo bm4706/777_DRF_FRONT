@@ -7,23 +7,45 @@ window.onload = ()=>{
 
 
 // 회원가입
-async function handleSignin(){
-    const email = document.getElementById("email").value
-    const password = document.getElementById("password").value
-    const nickname = document.getElementById("nickname").value
+// async function handleSignin(){
+//     const email = document.getElementById("email").value
+//     const password = document.getElementById("password").value
+//     const nickname = document.getElementById("nickname").value
+//     const profileImage = document.getElementById("profile-image").files[0];
+
+//     const response = await fetch(`${backend_base_url}/users/signup/`, {
+//         headers:{
+//             'content-type':'application/json'
+//         },
+//         method:'POST',
+//         body: JSON.stringify({
+//             "email":email,
+//             "password":password,
+//             "nickname":nickname
+//         })
+//     })
+//     return response
+// }
+//  회원가입 (사진 추가)
+async function handleSignin() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const nickname = document.getElementById("nickname").value;
+    const profileImage = document.getElementById("image").files[0];
+
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("nickname", nickname);
+    formData.append("is_active", 1);
+    formData.append("image", profileImage); // Use the name "profileImage" that your backend expects.
 
     const response = await fetch(`${backend_base_url}/users/signup/`, {
-        headers:{
-            'content-type':'application/json'
-        },
-        method:'POST',
-        body: JSON.stringify({
-            "email":email,
-            "password":password,
-            "nickname":nickname
-        })
-    })
-    return response
+        method: 'POST',
+        body: formData, // Use FormData here
+    });
+
+    return response;
 }
 
 
@@ -116,12 +138,14 @@ async function postArticle() {
     const title = document.getElementById("title").value
     const content = document.getElementById("content").value
     const image = document.getElementById("image").files[0]
-
+    
     const formdata = new FormData();
 
     formdata.append('title', title)
     formdata.append('content', content)
-    formdata.append('image', image)
+    if (image) {
+        formdata.append('image', image);
+    }
 
     let token = localStorage.getItem("access")
 
