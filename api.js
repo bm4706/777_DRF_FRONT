@@ -195,3 +195,20 @@ async function postComment(articleId, newComment){
 }
 
 
+// 글 삭제
+async function handleDeleteArticle(button) {
+    const token = localStorage.getItem("access");
+    const response = await fetch(`${backend_base_url}/articles/${articleId}/`, {
+        method: 'DELETE',
+        headers: {
+            "Authorization": `Bearer ${token}`
+        },
+    });
+
+    if (response.status == 204) {
+        alert("글 삭제 완료!");
+        window.location.replace(`${frontend_base_url}/`);
+    } else {
+        alert("권한이없습니다.", response.status);
+    }
+}

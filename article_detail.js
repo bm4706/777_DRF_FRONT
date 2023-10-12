@@ -63,3 +63,22 @@ window.onload = async function(){
     await loadArticles(articleId);
     await loadComments(articleId);
 }
+
+
+
+
+// 수정하기로 이동하는 버튼
+async function updateBtn() {
+    const urlParams = new URLSearchParams(window.location.search);
+    articleId = urlParams.get('article_id');
+    console.log(articleId)
+    window.location.href = `${frontend_base_url}/article_update.html?article_id=${articleId}`
+}
+
+
+
+// 글 삭제
+async function deleteArticle(){
+    const response = await handleDeleteArticle(articleId)
+    console.log(response)
+}

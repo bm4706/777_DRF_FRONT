@@ -30,8 +30,16 @@
       <div id="article-image" class="col"></div>
       <div id="article-content" class="col align-self-center">게시글 내용</div>
     </div>
+    <body>>
   </div>
-  <body>
+  <button
+    id="delete-button"
+    class="btn btn-danger"
+    onclick="handleDeleteArticle(this)"
+  >
+    글 삭제
+  </button>
+    <button type="button" onclick="updateBtn()">수정하기</button>
     <div class="container mt-5">
       <ul class="list-unstyled" id="comment-list"></ul>
     </div>
