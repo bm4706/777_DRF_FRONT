@@ -1,4 +1,9 @@
+
 let articleId
+
+
+
+// let commentId
 console.log("디테일 js 로드")
 
 async function loadComments(articleId){
@@ -10,13 +15,19 @@ async function loadComments(articleId){
     response.forEach(comment =>{
         // 프로필사진 업로드하면 src 링크 바꿔주세요
         commentList.innerHTML += `
-        <li class="media d-flex">
+        <li class="media d-flex mt-4">
         <img class="mr-3" src="https://i.namu.wiki/i/aAjVJcFK3NRRIt5Ef32SxP6r8Hpl1F_EFl6anZAzO_4shH3IM7fsB8BVnTwd8rJy1rzAXU4xW37zmTsGbxaWwEkn4qr3K-ZCcnObSHw4qF57dl5pKNUjDOTJSFwvMw3RhVehfZ0coU-0JEr7r7moDg.webp" alt="프로필이미지" width="50" height "50">
         <div class="media-body">
           <h5 class="mt-0 mb-1">${comment.user}</h5>
           ${comment.content}
+          ${comment.id}
         </div>
-      </li>
+        <div>
+            <button type="button" onclick="commentupdatesubmit(${comment.id},${articleId})">수정</button>
+
+            <button type="button" onclick="commentdelete(${comment.id},${articleId})">삭제</button>
+        </div>
+        </li>
         `
     })
 }
@@ -32,14 +43,52 @@ async function submitComment(){
     loadComments(articleId)
 }
 
+// 댓글 수정 페이지로 이동
+async function commentupdatesubmit(commentId, articleId){
+    console.log(commentId)
+    console.log(articleId)
+    window.location.href = `${frontend_base_url}/comment_update.html?article_id=${articleId}&comment_id=${commentId}`
+}
+
+// 댓글 삭제 기능
+
+async function commentdelete(commentId) {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    // const commentId = urlParams.get('comment_id');
+    console.log(queryString)
+    const articleId = urlParams.get('article_id');
+    console.log(commentId)
+    console.log(articleId)
+    const token = localStorage.getItem("access");
+    const response = await fetch(`${backend_base_url}/articles/${articleId}/comment/${commentId}`, {
+        method: 'DELETE',
+        headers: {
+            "Authorization": `Bearer ${token}`
+        },
+    });
+ 
+    if (response.status == 204) {
+        alert("댓글 삭제 완료!");
+        window.location.replace(`${frontend_base_url}/article_detail.html?article_id=${articleId}`);
+    } else {
+        alert(response.status);
+    }
+}
+
+
+
+
 
 async function loadArticles(articleId){
     const response=await getArticle(articleId);
 
+    const articleUser=document.getElementById("article-user")
     const articleTitle=document.getElementById("article-title")
     const articleImage=document.getElementById("article-image")
     const articleContent=document.getElementById("article-content")
 
+    articleUser.innerText = response.user
     articleTitle.innerText = response.title
     articleContent.innerText = response.content
     const newImage = document.createElement("img")
@@ -82,3 +131,9 @@ async function deleteArticle(){
     const response = await handleDeleteArticle(articleId)
     console.log(response)
 }
+
+
+// async function Articlecommentupdate(){
+//     const response = await Comment_updatesubmit(articleId)
+//     console.log(response)
+// }
